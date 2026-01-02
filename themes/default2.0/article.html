@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>{{ &articleSingle.title }} - {{ &OPT.siteName }}</title>
+	<meta name="keywords" content="{{ &articleSingle.category }},{{ &articleSingle.tags }}" />
+	<meta name="description" content="{{ &OPT.siteDescription }}" />
+
+	<!-- 日式侘寂风格样式 -->
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Zen+Maru+Gothic:wght@300;400;500&display=swap');
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		:root {
+			--color-bg: #F5F0E8; /* 米色纸底 */
+			--color-bg-alt: #EDE8DF; /* 深米色 */
+			--color-text: #3D3D3D; /* 墨色 */
+			--color-text-light: #6B6B6B; /* 淡墨 */
+			--color-accent: #8B7355; /* 茶色 */
+			--color-accent-light: #C4A77D; /* 浅茶色 */
+			--color-border: #D9D3C9; /* 枯山水边框 */
+			--color-white: #FAFAF9; /* 和纸白 */
+			--shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+			--shadow-hover: 0 4px 16px rgba(0,0,0,0.08);
+		}
+
+		body {
+			font-family: 'Noto Serif SC', 'Zen Maru Gothic', serif;
+			background: var(--color-bg);
+			color: var(--color-text);
+			line-height: 1.9;
+			font-size: 15px;
+			letter-spacing: 0.05em;
+		}
+
+		/* 页面容器 */
+		.site {
+			max-width: 1200px;
+			margin: 0 auto;
+			background: var(--color-white);
+			min-height: 100vh;
+			box-shadow: 0 0 40px rgba(0,0,0,0.03);
+		}
+
+		/* 顶部导航 */
+		.site-header {
+			background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-white) 100%);
+			padding: 60px 40px 40px;
+			text-align: center;
+			border-bottom: 1px solid var(--color-border);
+		}
+
+		.io-title-description {
+			margin-bottom: 30px;
+		}
+
+		.io-title-description a {
+			font-size: 2.5em;
+			font-weight: 300;
+			color: var(--color-text);
+			text-decoration: none;
+			letter-spacing: 0.15em;
+			margin-bottom: 10px;
+			display: inline-block;
+			transition: color 0.3s ease;
+		}
+
+		.io-title-description a:hover {
+			color: var(--color-accent);
+		}
+
+		.site-description {
+			font-size: 0.95em;
+			color: var(--color-text-light);
+			font-weight: 300;
+			letter-spacing: 0.1em;
+		}
+
+		/* 导航菜单 */
+		.themonic-nav {
+			margin-top: 30px;
+		}
+
+		.nav-menu {
+			list-style: none;
+			display: flex;
+			justify-content: center;
+			gap: 40px;
+			flex-wrap: wrap;
+		}
+
+		.nav-menu li a {
+			color: var(--color-text-light);
+			text-decoration: none;
+			font-size: 0.9em;
+			letter-spacing: 0.12em;
+			padding: 8px 0;
+			position: relative;
+			transition: color 0.3s ease;
+		}
+
+		.nav-menu li a::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 0;
+			height: 1px;
+			background: var(--color-accent);
+			transition: width 0.3s ease;
+		}
+
+		.nav-menu li a:hover {
+			color: var(--color-accent);
+		}
+
+		.nav-menu li a:hover::after {
+			width: 100%;
+		}
+
+		/* 主内容区 */
+		.wrapper {
+			display: grid;
+			grid-template-columns: 1fr 320px;
+			gap: 60px;
+			padding: 60px 40px;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		/* 文章详情 */
+		.site-content {
+			min-width: 0;
+		}
+
+		article {
+			padding: 50px;
+			background: var(--color-white);
+			border: 1px solid var(--color-border);
+		}
+
+		/* 文章标题 */
+		.entry-title {
+			font-size: 2em;
+			font-weight: 400;
+			margin-bottom: 25px;
+			letter-spacing: 0.1em;
+			color: var(--color-text);
+			line-height: 1.4;
+		}
+
+		/* 文章元信息 */
+		.below-title-meta {
+			padding-bottom: 25px;
+			margin-bottom: 30px;
+			border-bottom: 1px dashed var(--color-border);
+			font-size: 0.9em;
+			color: var(--color-text-light);
+		}
+
+		.below-title-meta a {
+			color: var(--color-accent);
+			text-decoration: none;
+			transition: color 0.3s ease;
+		}
+
+		.below-title-meta a:hover {
+			color: var(--color-accent-light);
+		}
+
+		/* 文章内容 */
+		.entry-content {
+			font-size: 1.05em;
+			line-height: 2;
+			color: var(--color-text);
+		}
+
+		.entry-content h1,
+		.entry-content h2,
+		.entry-content h3,
+		.entry-content h4,
+		.entry-content h5,
+		.entry-content h6 {
+			font-weight: 400;
+			margin: 35px 0 20px;
+			letter-spacing: 0.08em;
+			color: var(--color-text);
+		}
+
+		.entry-content h2 {
+			font-size: 1.6em;
+			padding-bottom: 10px;
+			border-bottom: 1px solid var(--color-border);
+		}
+
+		.entry-content h3 {
+			font-size: 1.4em;
+		}
+
+		.entry-content p {
+			margin-bottom: 20px;
+		}
+
+		.entry-content a {
+			color: var(--color-accent);
+			text-decoration: none;
+			border-bottom: 1px dashed var(--color-accent);
+			transition: all 0.3s ease;
+		}
+
+		.entry-content a:hover {
+			color: var(--color-accent-light);
+			border-bottom-style: solid;
+		}
+
+		.entry-content img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 2px;
+			margin: 25px 0;
+			opacity: 0.95;
+			transition: opacity 0.3s ease;
+		}
+
+		.entry-content img:hover {
+			opacity: 1;
+		}
+
+		.entry-content blockquote {
+			margin: 25px 0;
+			padding: 20px 25px;
+			background: var(--color-bg-alt);
+			border-left: 3px solid var(--color-accent);
+			font-style: italic;
+			color: var(--color-text-light);
+		}
+
+		.entry-content ul,
+		.entry-content ol {
+			margin: 20px 0;
+			padding-left: 30px;
+		}
+
+		.entry-content li {
+			margin-bottom: 10px;
+		}
+
+		/* 代码块 */
+		.entry-content pre {
+			background: var(--color-bg-alt);
+			border: 1px solid var(--color-border);
+			border-radius: 2px;
+			padding: 20px;
+			overflow-x: auto;
+			margin: 25px 0;
+			font-size: 0.9em;
+		}
+
+		.entry-content code {
+			font-family: 'Consolas', 'Monaco', monospace;
+		}
+
+		/* 文章底部元信息 */
+		.entry-meta {
+			margin-top: 40px;
+			padding-top: 25px;
+			border-top: 1px dashed var(--color-border);
+			font-size: 0.9em;
+			color: var(--color-text-light);
+		}
+
+		.entry-meta span {
+			display: inline-block;
+			margin-right: 25px;
+		}
+
+		.entry-meta a {
+			color: var(--color-accent);
+			text-decoration: none;
+			transition: color 0.3s ease;
+		}
+
+		.entry-meta a:hover {
+			color: var(--color-accent-light);
+		}
+
+		/* 文章导航 */
+		.nav-single {
+			margin: 40px 0;
+			padding: 30px;
+			background: var(--color-bg-alt);
+			border: 1px solid var(--color-border);
+		}
+
+		.nav-previous, .nav-next {
+			display: inline-block;
+			margin: 10px 0;
+		}
+
+		.nav-single a {
+			color: var(--color-text-light);
+			text-decoration: none;
+			transition: color 0.3s ease;
+			font-size: 0.95em;
+		}
+
+		.nav-single a:hover {
+			color: var(--color-accent);
+		}
+
+		/* 侧边栏 */
+		.widget-area {
+			min-width: 0;
+		}
+
+		.widget {
+			margin-bottom: 40px;
+			padding: 30px;
+			background: var(--color-bg-alt);
+			border: 1px solid var(--color-border);
+		}
+
+		.widget-title {
+			font-size: 1.1em;
+			font-weight: 400;
+			margin-bottom: 20px;
+			padding-bottom: 10px;
+			border-bottom: 2px solid var(--color-accent);
+			letter-spacing: 0.15em;
+			color: var(--color-text);
+		}
+
+		.widget ul {
+			list-style: none;
+		}
+
+		.widget li {
+			padding: 8px 0;
+			border-bottom: 1px dotted var(--color-border);
+		}
+
+		.widget li:last-child {
+			border-bottom: none;
+		}
+
+		.widget a {
+			color: var(--color-text-light);
+			text-decoration: none;
+			transition: color 0.3s ease;
+			display: block;
+		}
+
+		.widget a:hover {
+			color: var(--color-accent);
+		}
+
+		/* 标签云 */
+		.tagcloud {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.tagcloud a {
+			padding: 6px 12px;
+			background: var(--color-white);
+			border: 1px solid var(--color-border);
+			font-size: 0.85em !important;
+			transition: all 0.3s ease;
+		}
+
+		.tagcloud a:hover {
+			background: var(--color-accent);
+			color: var(--color-white);
+			border-color: var(--color-accent);
+		}
+
+		/* 页脚 */
+		.site-wordpress {
+			text-align: center;
+			padding: 40px;
+			background: var(--color-bg-alt);
+			border-top: 1px solid var(--color-border);
+			font-size: 0.85em;
+			color: var(--color-text-light);
+			letter-spacing: 0.08em;
+		}
+
+		.site-wordpress a {
+			color: var(--color-accent);
+			text-decoration: none;
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 900px) {
+			.wrapper {
+				grid-template-columns: 1fr;
+				padding: 40px 20px;
+			}
+
+			.site-header {
+				padding: 40px 20px 30px;
+			}
+
+			.io-title-description a {
+				font-size: 2em;
+			}
+
+			article {
+				padding: 30px;
+			}
+
+			.entry-title {
+				font-size: 1.6em;
+			}
+
+			.nav-menu {
+				gap: 20px;
+			}
+		}
+
+		@media (max-width: 600px) {
+			article {
+				padding: 25px;
+			}
+
+			.widget {
+				padding: 20px;
+			}
+
+			.entry-content {
+				font-size: 1em;
+			}
+
+			.nav-single {
+				padding: 20px;
+			}
+		}
+
+		/* 清除浮动 */
+		.clear::after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	</style>
+
+	<link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.3.2/styles/github.min.css">
+	<script src='https://cdn.staticfile.org/highlight.js/10.3.2/highlight.min.js'></script>
+
+	{{ &OPT.codeBeforHead }}
+</head>
+<body>
+	<div class="site">
+		<!-- 顶部 -->
+		<header class="site-header">
+			<div class="io-title-description">
+				<a href="/">{{ &OPT.siteName }}</a>
+				<br />
+				<span class="site-description">{{ &OPT.siteDescription }}</span>
+			</div>
+
+			<!-- 导航菜单 -->
+			<nav class="themonic-nav">
+				<ul class="nav-menu">
+					{{ #widgetMenuList }}
+					<li>
+						<a href="{{ &url }}">{{ &title }}</a>
+					</li>
+					{{ /widgetMenuList }}
+				</ul>
+			</nav>
+		</header>
+
+		<!-- 主内容 -->
+		<div class="wrapper">
+			<div class="site-content">
+				<article>
+					<!-- 文章标题 -->
+					<h1 class="entry-title">{{ &articleSingle.title }}</h1>
+
+					<!-- 文章元信息 -->
+					<div class="below-title-meta">
+						<span>{{ &articleSingle.createDate10 }}</span>
+						{{ &OPT.otherCodeA }}
+					</div>
+
+					<!-- 文章内容 -->
+					<div class="entry-content">
+						{{ &articleSingle.contentHtml }}
+					</div>
+
+					<!-- 文章底部元信息 -->
+					<footer class="entry-meta">
+						<span>
+							分类:
+							{{ #articleSingle.category }}
+							<a href="/category/{{&.}}">{{&.}}</a>
+							{{ /articleSingle.category }}
+						</span>
+						<span>
+							标签:
+							{{ #articleSingle.tags }}
+							<a href="/tags/{{&.}}">{{&.}}</a>
+							{{ /articleSingle.tags }}
+						</span>
+					</footer>
+				</article>
+
+				<!-- 文章导航 -->
+				<nav class="nav-single">
+					<div class="nav-previous">
+						{{ #articleNewer }}
+						<a href="{{ &url }}">← {{ &title }}</a>
+						{{ /articleNewer }}
+					</div>
+					<div class="nav-next">
+						{{ #articleOlder }}
+						<a href="{{ &url }}">{{ &title }} →</a>
+						{{ /articleOlder }}
+					</div>
+				</nav>
+
+				<!-- 评论区 -->
+				{{ &OPT.commentCode }}
+			</div>
+
+			<!-- 侧边栏 -->
+			<aside class="widget-area">
+				<!-- 近期文章 -->
+				<div class="widget">
+					<p class="widget-title">近期文章</p>
+					<ul>
+						{{ #widgetRecentlyList }}
+						<li><a href="{{ &url }}">{{ &title }}</a></li>
+						{{ /widgetRecentlyList }}
+					</ul>
+				</div>
+
+				<!-- 分类目录 -->
+				<div class="widget">
+					<p class="widget-title">分类目录</p>
+					<ul>
+						{{ #widgetCategoryList }}
+						<li><a href="/category/{{&.}}">{{&.}}</a></li>
+						{{ /widgetCategoryList }}
+					</ul>
+				</div>
+
+				<!-- 标签云 -->
+				<div class="widget">
+					<p class="widget-title">标签云</p>
+					<div class="tagcloud">
+						{{ #widgetTagsList }}
+						<a href="/tags/{{&.}}">{{&.}}</a>
+						{{ /widgetTagsList }}
+					</div>
+				</div>
+
+				<!-- 链接 -->
+				<div class="widget">
+					<p class="widget-title">链接</p>
+					<ul>
+						<li><a href="/admin/">管理站点</a></li>
+						{{ #widgetLinkList }}
+						<li><a href="{{ &url }}" target="_blank">{{ &title }}</a></li>
+						{{ /widgetLinkList }}
+					</ul>
+				</div>
+
+				{{ &OPT.widgetOther }}
+			</aside>
+		</div>
+
+		<!-- 页脚 -->
+		<div class="site-wordpress">
+			{{ &OPT.copyRight }}
+		</div>
+	</div>
+
+	<script>
+		// 代码高亮
+		hljs.initHighlightingOnLoad();
+	</script>
+
+	{{ &OPT.codeBeforBody }}
+</body>
+</html>
